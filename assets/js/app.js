@@ -311,19 +311,62 @@ function handleBookingSubmit(formElement) {
     localStorage.setItem("huuvinh_bookings", JSON.stringify(history));
   } catch (err) {}
 
+  // Cấu hình nhận thông báo tự động về điện thoại
+  // (Điền Telegram Bot Token hoặc Google Sheets Webhook bên dưới để điện thoại tự động báo chuông khi có khách đặt xe)
+  const NOTIFICATION_WEBHOOK = {
+    telegram: {
+      enabled: false, // Đổi thành true khi bạn điền botToken & chatId
+      botToken: "",   // Điền Token từ @BotFather
+      chatId: ""      // Điền Chat ID từ @userinfobot
+    },
+    googleSheetWebhookUrl: "" // Điền URL Webhook Google Apps Script nếu dùng
+  };
+
+  // 1. Tự động bắn thông báo ngầm về Telegram của Mr Vinh (nếu được kích hoạt)
+  if (NOTIFICATION_WEBHOOK.telegram.enabled && NOTIFICATION_WEBHOOK.telegram.botToken && NOTIFICATION_WEBHOOK.telegram.chatId) {
+    try {
+      fetch(`https://api.telegram.org/bot${NOTIFICATION_WEBHOOK.telegram.botToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: NOTIFICATION_WEBHOOK.telegram.chatId,
+          text: message
+        })
+      }).catch(err => console.warn("Lỗi gửi thông báo Telegram:", err));
+    } catch (e) {}
+  }
+
+  // 2. Tự động bắn thông báo về Google Sheets (nếu được kích hoạt)
+  if (NOTIFICATION_WEBHOOK.googleSheetWebhookUrl) {
+    try {
+      fetch(NOTIFICATION_WEBHOOK.googleSheetWebhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          time: new Date().toLocaleString("vi-VN"),
+          customerName,
+          customerPhone,
+          routeName,
+          carType,
+          pickupAddress,
+          travelTime,
+          travelDate,
+          note
+        })
+      }).catch(err => console.warn("Lỗi gửi Google Sheets:", err));
+    } catch (e) {}
+  }
+
   const modal = document.getElementById("bookingModal");
   if (modal) modal.classList.remove("active");
 
-  const confirmRedirect = confirm(
-    `Cảm ơn Quý khách ${customerName}!\nĐơn đặt xe [${routeName}] đã được ghi nhận.\n\nNhấn "OK" để gửi tin nhắn xác nhận qua Zalo cho Mr Vinh (0984.650.950) hoặc "Hủy" để chờ tài xế gọi lại.`
-  );
-
-  if (confirmRedirect) {
-    const zaloUrl = `https://zalo.me/0984650950?text=${encodeURIComponent(message)}`;
-    window.open(zaloUrl, "_blank");
-  } else {
-    alert("Dịch Vụ Hữu Vinh đã nhận thông tin và sẽ gọi ngay lại cho quý khách trong 5 phút! Hotline: 0984.650.950");
-  }
+  // 3. Mở thẳng Zalo của Mr Vinh với nội dung đã được soạn sẵn đầy đủ 100%
+  const zaloUrl = `https://zalo.me/0984650950?text=${encodeURIComponent(message)}`;
+  
+  // Hiển thị thông báo thân thiện và tự chuyển tiếp tới Zalo
+  alert(`✓ Đã ghi nhận đơn đặt xe của Quý khách ${customerName}!\n\nHệ thống đang chuyển quý khách đến Zalo của Mr Vinh (0984.650.950) để xác nhận chuyến đi.`);
+  window.open(zaloUrl, "_blank");
 }
 
 // ==========================================================================
