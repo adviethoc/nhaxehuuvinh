@@ -1,28 +1,30 @@
 /**
  * Thuật toán tính cước và khoảng cách tự động cho Dịch Vụ Du Lịch Hữu Vinh
- * Công thức giá theo yêu cầu:
- * - Xe 4 chỗ: 8.000 đ / km (1 chiều)
- * - Xe 7 chỗ: 9.000 đ / km (1 chiều)
+ * Công thức giá chuẩn theo km:
+ * - Vé tiện chuyến: 8.000 đ / km
+ * - Bao xe 4 chỗ: 10.000 đ / km
+ * - Bao xe 7 chỗ: 11.000 đ / km
  * - Giá 2 chiều (khứ hồi): Chiều về giảm 60% so với chiều đi (Tổng 2 chiều = Chiều đi + 40% Chiều về = 1.4 * Chiều đi)
  * Hotline / Zalo: 0984.650.950 - Mr Vinh
  */
 
-// Đơn giá niêm yết
+// Đơn giá niêm yết chuẩn
 const FARE_RATES = {
-  "4seats": 8000,   // 8k / km
-  "7seats": 9000    // 9k / km
+  "tienchuyen": 8000, // 8k / km tiện chuyến
+  "4seats": 10000,    // 10k / km xe 4 chỗ
+  "7seats": 11000     // 11k / km xe 7 chỗ
 };
 
 /**
  * Tính giá cước theo số km thực tế và quy tắc giảm giá khứ hồi
  * @param {number} distanceKm Khoảng cách thực tế (km)
- * @param {string} carType '4seats' | '7seats'
+ * @param {string} carType '4seats' | '7seats' | 'tienchuyen'
  * @param {string} tripType 'oneway' | 'roundtrip'
  */
 function calculateFare(distanceKm, carType = "4seats", tripType = "oneway") {
   // Khoảng cách tối thiểu tính cước là 15km để đảm bảo chi phí điều xe
   const actualKm = Math.max(distanceKm, 15);
-  const ratePerKm = FARE_RATES[carType] || 8000;
+  const ratePerKm = FARE_RATES[carType] || 10000;
 
   // Giá cước chiều đi gốc
   const onewayPrice = Math.round((actualKm * ratePerKm) / 10000) * 10000;

@@ -5,54 +5,55 @@
  */
 
 // Định nghĩa danh sách các Cụm Tuyến Nằm Ngang chuẩn TienChuyen24h
+// Giá CHỈ TỪ tự động theo chặng có giá tiện chuyến thấp nhất (8k/km)
 const ROUTE_CLUSTERS = [
   {
     id: "hcm-bp",
     title: "TP.HCM ⇄ Bình Phước",
     subtitle: "Tiện chuyến • Giá tốt • Đón tận nơi",
-    minPriceText: "550K",
+    minPriceText: "640K",
     icon: "🚗"
   },
   {
     id: "hcm-vt",
     title: "TP.HCM ⇄ Vũng Tàu",
     subtitle: "Tiện chuyến • Giá tốt • Chạy cao tốc",
-    minPriceText: "750K",
+    minPriceText: "720K",
     icon: "🚗"
   },
   {
     id: "hcm-ld",
     title: "TP.HCM ⇄ Lâm Đồng",
     subtitle: "Tiện chuyến • Đà Lạt, Bảo Lộc • Xe êm không say",
-    minPriceText: "950K",
+    minPriceText: "1440K",
     icon: "🚗"
   },
   {
     id: "bp-dn",
     title: "Bình Phước ⇄ Đồng Nai",
     subtitle: "Tiện chuyến • Giá tốt",
-    minPriceText: "450K",
+    minPriceText: "640K",
     icon: "🚗"
   },
   {
     id: "bp-vt",
     title: "Bình Phước ⇄ Vũng Tàu",
     subtitle: "Tiện chuyến • Du lịch biển cuối tuần",
-    minPriceText: "1050K",
+    minPriceText: "1280K",
     icon: "🚗"
   },
   {
     id: "bp-dno",
     title: "Bình Phước ⇄ Đắk Nông",
     subtitle: "Tiện chuyến • QL14 Tây Nguyên",
-    minPriceText: "700K",
+    minPriceText: "960K",
     icon: "🚗"
   },
   {
     id: "bp-ld",
     title: "Bình Phước ⇄ Lâm Đồng",
     subtitle: "Tiện chuyến • Rừng sinh thái Cát Tiên",
-    minPriceText: "500K",
+    minPriceText: "720K",
     icon: "🚗"
   }
 ];
@@ -94,6 +95,11 @@ function initHorizontalClusters() {
       // Mặc định mở cụm đầu tiên nếu không tìm kiếm, hoặc mở tất cả khi tìm thấy kết quả
       const isOpen = s ? true : (index === 0);
 
+      // Tự động tính giá CHỈ TỪ theo giá tiện chuyến thấp nhất trong cụm
+      const allClusterRoutes = ROUTES_DATA.filter(r => r.group === cluster.id);
+      const minVal = allClusterRoutes.length > 0 ? Math.min(...allClusterRoutes.map(r => r.tienChuyenPrice)) : 0;
+      const displayMinPrice = minVal > 0 ? `${Math.round(minVal / 1000)}K` : cluster.minPriceText;
+
       return `
         <div class="cluster-item ${isOpen ? 'open' : ''}" id="cluster-${cluster.id}">
           <!-- Thanh tóm tắt cụm nằm ngang -->
@@ -108,7 +114,7 @@ function initHorizontalClusters() {
             <div class="cluster-right-box">
               <div class="price-chip-yellow">
                 <span class="chip-label">CHỈ TỪ</span>
-                <span class="chip-price">${cluster.minPriceText}</span>
+                <span class="chip-price">${displayMinPrice}</span>
                 <span class="chip-red-bar"></span>
               </div>
               <div class="cluster-chevron">▼</div>
