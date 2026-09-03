@@ -862,47 +862,118 @@ button {
 /* ==========================================================================
    FLOATING BUTTONS (ZALO & GỌI ĐIỆN)
    ========================================================================== */
+/* ==========================================================================
+   NÚT LIÊN HỆ NỔI GÓC MÀN HÌNH (CHUẨN GREEN SM XANH NGỌC NHẸ & HÌNH ẢNH MẪU)
+   ========================================================================== */
 .quick-contact-floating {
   position: fixed;
-  bottom: 20px;
+  bottom: 22px;
   right: 20px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
 }
 
-.btn-float {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+.floating-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px 8px 12px;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.floating-pill-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* 1. Nút Đặt xe - Màu Xanh Ngọc Nhẹ (Light Cyan / Mint Green SM) */
+.floating-pill-btn.btn-call {
+  background: linear-gradient(135deg, #F0FDFB 0%, #E6FAF8 100%);
+  border: 1.5px solid #99F6E4;
+  box-shadow: 0 6px 22px rgba(13, 148, 136, 0.16);
+  animation: float-pulse-pill 3.5s infinite ease-in-out;
+}
+
+.floating-pill-btn.btn-call:hover {
+  background: linear-gradient(135deg, #E6FAF8 0%, #D1F8F4 100%);
+  border-color: #5EEAD4;
+  box-shadow: 0 10px 28px rgba(13, 148, 136, 0.26);
+}
+
+/* 2. Nút Zalo - Màu Xanh Ngọc Nhẹ / Xanh Nước Biển Nhạt (Light Cyan / Soft Blue) */
+.floating-pill-btn.btn-zalo {
+  background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+  border: 1.5px solid #BAE6FD;
+  box-shadow: 0 6px 22px rgba(2, 132, 199, 0.15);
+}
+
+.floating-pill-btn.btn-zalo:hover {
+  background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+  border-color: #7DD3FC;
+  box-shadow: 0 10px 28px rgba(2, 132, 199, 0.25);
+}
+
+.pill-icon-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--white);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  transition: var(--transition);
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  flex-shrink: 0;
 }
 
-.btn-float:hover {
-  transform: translateY(-2px) scale(1.05);
+.pill-icon-box.icon-call {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #CCFBF1;
+  color: #0F766E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-float.zalo {
-  background: var(--zalo-blue);
+.pill-text-box {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.22;
+  text-align: left;
 }
 
-.btn-float.call {
-  background: var(--call-green);
-  animation: pulse-ring 2s infinite;
+.floating-pill-btn.btn-call .pill-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0F766E;
 }
 
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(0, 168, 89, 0.6); }
-  70% { box-shadow: 0 0 0 12px rgba(0, 168, 89, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 168, 89, 0); }
+.floating-pill-btn.btn-call .pill-highlight {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #0F766E;
+  letter-spacing: 0.02em;
+}
+
+.floating-pill-btn.btn-zalo .pill-label-top {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0284C7;
+}
+
+.floating-pill-btn.btn-zalo .pill-label-bottom {
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: #0284C7;
+  letter-spacing: -0.01em;
+}
+
+@keyframes float-pulse-pill {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 /* ==========================================================================
@@ -1294,12 +1365,34 @@ button {
 
   .quick-contact-floating {
     bottom: 16px;
-    right: 16px;
+    right: 14px;
+    gap: 9px;
   }
 
-  .btn-float {
-    width: 48px;
-    height: 48px;
+  .floating-pill-btn {
+    padding: 6px 14px 6px 10px;
+    gap: 8px;
+  }
+
+  .pill-icon-box.icon-call {
+    width: 34px;
+    height: 34px;
+  }
+
+  .floating-pill-btn.btn-call .pill-label {
+    font-size: 0.76rem;
+  }
+
+  .floating-pill-btn.btn-call .pill-highlight {
+    font-size: 0.92rem;
+  }
+
+  .floating-pill-btn.btn-zalo .pill-label-top {
+    font-size: 0.76rem;
+  }
+
+  .floating-pill-btn.btn-zalo .pill-label-bottom {
+    font-size: 0.88rem;
   }
 }
 
