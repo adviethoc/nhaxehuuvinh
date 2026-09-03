@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tự Nhập Chuyến Đi & Tính Cước Tự Động | Dịch Vụ Xe Tiện Chuyến Hữu Vinh 24/7</title>
+  
+  <meta name="description" content="Công cụ tự tính giá xe tiện chuyến và bao xe VinFast Hữu Vinh. Tự do nhập điểm đón và điểm đến bất kỳ trên toàn quốc. Tính khoảng cách km và báo giá tức thì. Hotline: 0984.650.950." />
+  <meta name="keywords" content="tinh gia xe tien chuyen, dat xe tuy chon tphcm binh phuoc, xe tien chuyen tu nhap diem don, gia xe vinfast huu vinh" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://nhaxehuuvinh.vn/booking-custom.html" />
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="topbar">
+    <div class="container topbar-content">
+      <div class="topbar-badge">
+        <span class="pulse-dot"></span>
+        Hệ thống tính cước tự động theo km | 100% Xe Điện VinFast Sang Trọng
+      </div>
+      <div class="topbar-contact">
+        <span>Quản lý: <strong>Mr Vinh</strong></span>
+        <a href="tel:0984650950">
+          📞 Hotline: <span class="hotline-highlight">0984.650.950</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon-box">⚡</div>
+        <div class="brand-text-box">
+          <h1>HỮU VINH <span>CAR</span></h1>
+          <p>Dịch Vụ Du Lịch & Tiện Chuyến</p>
+        </div>
+      </a>
+
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Trang chủ</a>
+        <a href="index.html#tuyen-duong" class="nav-link">Bảng giá tuyến</a>
+        <a href="booking-custom.html" class="nav-link active">Tự nhập chuyến</a>
+        <a href="index.html#doi-xe" class="nav-link">Ảnh xe thực tế</a>
+        <a href="index.html#cam-ket" class="nav-link">Cam kết dịch vụ</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="tel:0984650950" class="btn-hotline-header">
+          <span>📞</span> 0984.650.950
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Custom Booking Form -->
+  <main class="custom-page-container">
+    <div class="container" style="max-width: 820px;">
+
+      <div style="margin-bottom: 24px;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--primary); font-size: 0.95rem;">
+          ← Quay lại Trang Chủ
+        </a>
+      </div>
+
+      <div class="custom-booking-card">
+        <div class="custom-card-header">
+          <h2>📍 Tự Nhập Chuyến Đi Của Bạn</h2>
+          <p>Nhập bất kỳ điểm đón và điểm đến nào, hệ thống sẽ tự động đo khoảng cách (km) và tính cước phí minh bạch nhất.</p>
+        </div>
+
+        <div class="custom-card-body">
+          <form id="customBookingForm">
+            
+            <!-- Điểm Đón -->
+            <div class="form-group">
+              <label class="form-label" style="color: var(--slate-800); font-size: 0.95rem;">
+                1. Điểm đón (Nơi bạn muốn xe đón):
+              </label>
+              <div class="input-with-icon">
+                <span class="icon" style="color: var(--primary);">🟢</span>
+                <input 
+                  type="text" 
+                  id="customPickup" 
+                  name="pickupAddress" 
+                  class="form-control" 
+                  style="background: #F8FAFC; color: var(--slate-900); border-color: #CBD5E1; font-weight: 600;" 
+                  placeholder="Ví dụ: Sân bay Tân Sơn Nhất, Quận 1, hoặc TP. Đồng Xoài..." 
+                  value="TP.HCM" 
+                  required 
+                />
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                <button type="button" class="btn-gps-current" data-target-input="customPickup" style="font-size: 0.82rem; color: var(--primary); font-weight: 700;">
+                  ◎ Dùng vị trí hiện tại
+                </button>
+                <div style="font-size: 0.8rem; color: var(--slate-400);">Gợi ý: Quận 1, Tân Bình, Thủ Đức...</div>
+              </div>
+            </div>
+
+            <!-- Nút Swap Đảo Chiều -->
+            <div class="swap-locations-row">
+              <button type="button" class="btn-swap-locations" id="btnSwapLocations">
+                ⇅ Đảo chiều điểm đón ⇄ điểm đến
+              </button>
+            </div>
+
+            <!-- Điểm Đến -->
+            <div class="form-group">
+              <label class="form-label" style="color: var(--slate-800); font-size: 0.95rem;">
+                2. Điểm đến (Nơi bạn muốn đến):
+              </label>
+              <div class="input-with-icon">
+                <span class="icon" style="color: #EF4444;">🔴</span>
+                <input 
+                  type="text" 
+                  id="customDropoff" 
+                  name="dropoffAddress" 
+                  class="form-control" 
+                  style="background: #F8FAFC; color: var(--slate-900); border-color: #CBD5E1; font-weight: 600;" 
+                  placeholder="Ví dụ: TP. Đồng Xoài, Bình Phước hoặc Vũng Tàu..." 
+                  value="Đồng Xoài (Bình Phước)" 
+                  required 
+                />
+              </div>
+            </div>
+
+            <!-- Chọn nhanh địa điểm quen thuộc -->
+            <div style="margin-bottom: 24px;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--slate-500); display: block; margin-bottom: 6px;">
+                Chọn nhanh điểm đến phổ biến:
+              </span>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <button type="button" class="filter-btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="setQuickDropoff('Đồng Xoài (Bình Phước)')">Đồng Xoài</button>
+                <button type="button" class="filter-btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="setQuickDropoff('Chơn Thành (Bình Phước)')">Chơn Thành</button>
+                <button type="button" class="filter-btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="setQuickDropoff('Đồng Phú (Bình Phước)')">Đồng Phú</button>
+                <button type="button" class="filter-btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="setQuickDropoff('Bình Long (Bình Phước)')">Bình Long</button>
+                <button type="button" class="filter-btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="setQuickDropoff('TP. Vũng Tàu')">Vũng Tàu</button>
+                <button type="button" class="filter-btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="setQuickDropoff('TP. Đà Lạt (Lâm Đồng)')">Đà Lạt</button>
+                <button type="button" class="filter-btn" style="padding: 5px 12px; font-size: 0.8rem;" onclick="setQuickDropoff('Biên Hòa (Đồng Nai)')">Biên Hòa</button>
+              </div>
+            </div>
+
+            <!-- Loại xe & Chiều đi -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" style="color: var(--slate-800);">Loại xe phục vụ:</label>
+                <div class="radio-pill-group">
+                  <div class="radio-pill">
+                    <input type="radio" name="carType" id="customCar4" value="4seats" checked />
+                    <label for="customCar4" style="color: var(--slate-800); background: #F1F5F9;">🚗 Xe 4 chỗ</label>
+                  </div>
+                  <div class="radio-pill">
+                    <input type="radio" name="carType" id="customCar7" value="7seats" />
+                    <label for="customCar7" style="color: var(--slate-800); background: #F1F5F9;">🚙 Xe 7 chỗ</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="color: var(--slate-800);">Chiều di chuyển:</label>
+                <div class="radio-pill-group">
+                  <div class="radio-pill">
+                    <input type="radio" name="tripType" id="customTripOne" value="oneway" checked />
+                    <label for="customTripOne" style="color: var(--slate-800); background: #F1F5F9;">1 Chiều</label>
+                  </div>
+                  <div class="radio-pill">
+                    <input type="radio" name="tripType" id="customTripRound" value="roundtrip" />
+                    <label for="customTripRound" style="color: var(--slate-800); background: #F1F5F9;">Khứ Hồi (-40%)</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hình thức chuyến -->
+            <div class="form-group">
+              <label class="form-label" style="color: var(--slate-800);">Hình thức đặt xe:</label>
+              <div class="radio-pill-group">
+                <div class="radio-pill">
+                  <input type="radio" name="serviceType" id="customServTien" value="tienchuyen" checked />
+                  <label for="customServTien" style="color: var(--slate-800); background: #F1F5F9;">🎫 Vé Tiện Chuyến (Tiết kiệm nhất)</label>
+                </div>
+                <div class="radio-pill">
+                  <input type="radio" name="serviceType" id="customServBao" value="baoxe" />
+                  <label for="customServBao" style="color: var(--slate-800); background: #F1F5F9;">👑 Bao Xe Riêng Trọn Gói</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Khung Kết Quả Tính Cước Tự Động -->
+            <div class="calculated-quote-box" id="quoteResultBox">
+              <div style="font-size: 0.9rem; color: #166534; font-weight: 700;">
+                KHOẢNG CÁCH DỰ KIẾN: <span id="quoteDistance" style="font-size: 1.1rem; color: #047857;">~100 km</span> 
+                | THỜI GIAN: <span id="quoteDuration" style="font-size: 1.1rem; color: #047857;">~2 giờ 15 phút</span>
+              </div>
+              <div style="font-size: 0.85rem; color: #4B5563; margin-top: 4px;">Giá cước ước tính cho hành trình của bạn:</div>
+              <div class="quote-amount" id="quotePrice">550.000 đ</div>
+              <div style="font-size: 0.8rem; color: #15803D;">
+                ✓ Đã bao gồm xe điện VinFast đời mới + Tài xế phục vụ tận nơi
+              </div>
+            </div>
+
+            <!-- Thông tin khách hàng & Thời gian -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" style="color: var(--slate-800);">Ngày đón:</label>
+                <input type="date" name="travelDate" id="customTravelDate" class="form-control" style="color: var(--slate-900); background: #F8FAFC; border-color: #CBD5E1;" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="color: var(--slate-800);">Giờ đón:</label>
+                <input type="time" name="travelTime" value="08:00" class="form-control" style="color: var(--slate-900); background: #F8FAFC; border-color: #CBD5E1;" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" style="color: var(--slate-800);">Họ tên của bạn:</label>
+                <input type="text" name="customerName" class="form-control" style="color: var(--slate-900); background: #F8FAFC; border-color: #CBD5E1;" placeholder="Họ và tên..." required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="color: var(--slate-800);">Số điện thoại đón:</label>
+                <input type="tel" name="customerPhone" class="form-control" style="color: var(--slate-900); background: #F8FAFC; border-color: #CBD5E1;" placeholder="09xx.xxx.xxx" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" style="color: var(--slate-800);">Ghi chú thêm (Nếu có):</label>
+              <textarea name="note" class="form-control" style="color: var(--slate-900); background: #F8FAFC; border-color: #CBD5E1; height: 75px; padding-left: 14px;" placeholder="Ví dụ: Đón tại sảnh ga đến quốc nội sân bay, có mang theo nhiều hành lý..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit-booking" style="font-size: 1.05rem; padding: 18px;">
+              🚀 GỬI YÊU CẦU & KẾT NỐI ZALO MR VINH (0984.650.950)
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 0;">
+        <p>© 2026 Dịch Vụ Du Lịch & Tiện Chuyến Hữu Vinh. 100% Xe Điện VinFast. Hotline/Zalo: 0984.650.950 (Mr Vinh)</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/routes-data.js"></script>
+  <script src="assets/js/fare-calculator.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Thiết lập ngày mặc định là hôm nay
+      const dateInput = document.getElementById("customTravelDate");
+      if (dateInput) {
+        dateInput.value = new Date().toISOString().split("T")[0];
+      }
+
+      // Tự động tính toán khi thay đổi thông tin
+      const inputsToListen = [
+        "customPickup", "customDropoff", "customCar4", "customCar7",
+        "customTripOne", "customTripRound", "customServTien", "customServBao"
+      ];
+
+      inputsToListen.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("input", recalculateCustomQuote);
+          el.addEventListener("change", recalculateCustomQuote);
+        }
+      });
+
+      // Nút swap đảo chiều
+      const swapBtn = document.getElementById("btnSwapLocations");
+      if (swapBtn) {
+        swapBtn.addEventListener("click", () => {
+          const p = document.getElementById("customPickup");
+          const d = document.getElementById("customDropoff");
+          const temp = p.value;
+          p.value = d.value;
+          d.value = temp;
+          recalculateCustomQuote();
+        });
+      }
+
+      // Xử lý gửi form
+      const customForm = document.getElementById("customBookingForm");
+      if (customForm) {
+        customForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const pickup = document.getElementById("customPickup").value;
+          const dropoff = document.getElementById("customDropoff").value;
+          const routeName = `${pickup} ⇄ ${dropoff}`;
+          
+          // Tạo một input tạm để lưu routeName gửi vào handleBookingSubmit
+          let hiddenRoute = document.getElementById("tempCustomRoute");
+          if (!hiddenRoute) {
+            hiddenRoute = document.createElement("input");
+            hiddenRoute.type = "hidden";
+            hiddenRoute.name = "routeName";
+            hiddenRoute.id = "tempCustomRoute";
+            customForm.appendChild(hiddenRoute);
+          }
+          hiddenRoute.value = routeName;
+
+          handleBookingSubmit(customForm);
+        });
+      }
+
+      // Tính toán ban đầu
+      recalculateCustomQuote();
+    });
+
+    function setQuickDropoff(location) {
+      document.getElementById("customDropoff").value = location;
+      recalculateCustomQuote();
+    }
+
+    function recalculateCustomQuote() {
+      const pickup = document.getElementById("customPickup").value;
+      const dropoff = document.getElementById("customDropoff").value;
+      const carType = document.querySelector("input[name='carType']:checked")?.value || "4seats";
+      const tripType = document.querySelector("input[name='tripType']:checked")?.value || "oneway";
+      const serviceType = document.querySelector("input[name='serviceType']:checked")?.value || "tienchuyen";
+
+      if (!pickup || !dropoff) return;
+
+      const dist = estimateDistance(pickup, dropoff);
+      const fare = calculateFare(dist, carType, tripType, serviceType);
+
+      document.getElementById("quoteDistance").innerText = `~${fare.distanceKm} km`;
+      document.getElementById("quoteDuration").innerText = `~${fare.durationText}`;
+      document.getElementById("quotePrice").innerText = formatVND(fare.finalPrice);
+    }
+  </script>
+</body>
+</html>
