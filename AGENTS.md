@@ -28,14 +28,19 @@ Mọi trang web, dữ liệu bảng giá và công cụ tính toán đều phả
 
 ## 3. QUY CHUẨN THIẾT KẾ GIAO DIỆN (DESIGN SYSTEM & UI RULES)
 
-### 3.1. Huy hiệu giá vàng viền đỏ (Price Badge)
-- Khách hàng đặc biệt yêu cầu huy hiệu giá cụm tuyến nằm ngang phải chuẩn 100% như mẫu `tienchuyen24h.vn`:
-  - Khung badge: Nền vàng kem nhạt `#FFF9E6`, viền vàng `#FDE68A`, bo tròn 14px - 16px.
-  - Chữ `CHỈ TỪ`: Chữ hoa in đậm, màu đỏ rực `#DC2626`, kích thước `0.68rem`, font-weight `900`.
-  - Số tiền (Ví dụ: `640K`, `720K`): Chữ số màu đỏ rực `#DC2626`, kích thước `1.2rem`, font-weight `900`.
-  - **Nét gạch nền đỏ uốn cong bên dưới số (`.chip-red-bar`):** Chiều rộng `34px`, chiều cao `3.5px`, màu đỏ rực `#DC2626`, bo góc tròn `9999px`, nằm ngay dưới chân con số để tạo điểm nhấn nổi bật.
+### 3.1. Huy hiệu giá cụm tuyến (Price Badge) chuẩn Green SM
+- Huy hiệu giá cụm tuyến nằm ngang được thiết kế theo phong cách Green SM sang trọng, đồng bộ và nổi bật:
+  - Khung badge: Nền xanh ngọc nhẹ `#F0FDFB` ⇄ `#E6FAF8`, viền xanh cyan `#00BBA7`, bo tròn 14px.
+  - Chữ `CHỈ TỪ`: Chữ hoa in đậm, màu xanh ngọc đậm `#0F766E`, kích thước `0.68rem`, font-weight `800`.
+  - Số tiền (Ví dụ: `640K`, `720K`): Chữ số màu Deep Forest Teal `#064E48`, kích thước `1.25rem`, font-weight `900`.
+  - **Nét gạch cyan bên dưới số (`.chip-red-bar`):** Chiều rộng `34px`, chiều cao `3.5px`, màu xanh cyan `#00BBA7`, bo tròn `9999px`.
 
-### 3.2. Tính tương thích thiết bị (Responsive)
+### 3.2. Căn chỉnh các cột giá chặng con (Subroute Price Alignment)
+- Trong các dòng chặng con bung ra từ cụm:
+  - Cả 3 ô giá (**Tiện chuyến**, **Bao 4 chỗ**, **Bao 7 chỗ**) bắt buộc phải **bằng nhau 100%** (`width: 140px; height: 58px`) và đóng khung card chuẩn mực.
+  - Dùng CSS Grid để đảm bảo trên mọi dòng, 3 cột giá và nút `⚡ Đặt xe ngay` luôn **xếp thẳng hàng dọc tuyệt đối**, không bị thụt thò hay lệch cột.
+
+### 3.3. Tính tương thích thiết bị (Responsive)
 - **Máy tính (Desktop):** Giao diện rộng rãi (Container max 1140px - 1200px), hiển thị thanh menu ngang đầy đủ, bố cục cân đối chuyên nghiệp.
 - **Điện thoại (Mobile):** Các thẻ chặng tuyến, bảng tính cước, ảnh xe và popup đều phải co giãn mượt mà, không bị tràn màn hình (không sinh thanh cuộn ngang).
 

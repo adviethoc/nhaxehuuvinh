@@ -482,50 +482,56 @@ button {
   gap: 14px;
 }
 
-/* Badge Màu Vàng Nổi Bật: "CHỈ TỪ 550K" Có Nét Nền Đỏ Dưới Số Chuẩn TienChuyen24h */
+/* Badge Nổi Bật Chuẩn Green SM: Thay thế màu cam cũ, cực kỳ nổi bật, đồng bộ 100% và không rối mắt */
 .price-chip-yellow {
-  background: #FFF9E6;
-  border: 1.5px solid #FDE68A;
+  background: linear-gradient(135deg, #F0FDFB 0%, #E6FAF8 100%);
+  border: 1.5px solid #00BBA7;
   padding: 6px 14px 7px 14px;
   border-radius: 14px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
+  box-shadow: 0 3px 10px rgba(0, 187, 167, 0.16);
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 70px;
+  min-width: 78px;
+  transition: var(--transition);
+}
+
+.cluster-item:hover .price-chip-yellow {
+  box-shadow: 0 4px 14px rgba(0, 187, 167, 0.25);
+  transform: translateY(-1px);
 }
 
 .chip-label {
   display: block;
   font-size: 0.68rem;
-  font-weight: 900;
-  color: #DC2626; /* Chữ CHỈ TỪ màu đỏ nổi bật */
+  font-weight: 800;
+  color: #0F766E; /* Chữ CHỈ TỪ xanh ngọc đậm thanh lịch */
   line-height: 1;
   text-transform: uppercase;
-  margin-bottom: 2px;
-  letter-spacing: 0.04em;
+  margin-bottom: 3px;
+  letter-spacing: 0.05em;
 }
 
 .chip-price {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 900;
-  color: #DC2626; /* Số tiền màu đỏ nổi bật */
+  color: #064E48; /* Số tiền màu xanh ngọc đậm cực kỳ sắc nét và nổi bật */
   line-height: 1.1;
   display: inline-block;
   letter-spacing: -0.01em;
 }
 
-/* Nét gạch nền đỏ uốn cong nổi bật bên dưới số chuẩn 100% như TienChuyen24h */
+/* Nét gạch cyan thương hiệu bên dưới số */
 .chip-red-bar {
   display: block;
   width: 34px;
   height: 3.5px;
-  background: #DC2626; /* Nền đỏ dưới số */
+  background: #00BBA7; /* Nét cyan Green SM nổi bật đồng bộ */
   border-radius: 9999px;
-  margin-top: 2px;
-  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.35);
+  margin-top: 3px;
+  box-shadow: 0 1px 3px rgba(0, 187, 167, 0.35);
 }
 
 /* Nút Chevron Mũi Tên Đóng/Mở */
@@ -562,17 +568,16 @@ button {
   gap: 12px;
 }
 
-/* Dòng từng tuyến con nằm ngang */
+/* Dòng từng tuyến con nằm ngang - Cố định các cột thẳng tắp theo hàng dọc */
 .subroute-horizontal-card {
   background: var(--white);
   border: 1px solid var(--slate-200);
   border-radius: var(--radius-sm);
-  padding: 14px 18px;
-  display: flex;
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) auto 140px;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 14px;
+  gap: 20px;
   transition: var(--transition);
 }
 
@@ -580,6 +585,10 @@ button {
   border-color: #99F6E4;
   box-shadow: 0 4px 16px rgba(13, 148, 136, 0.08);
   background: #FCFDFD;
+}
+
+.subroute-dest-info {
+  min-width: 0;
 }
 
 .subroute-dest-info h5 {
@@ -597,16 +606,29 @@ button {
   gap: 10px;
 }
 
-/* Bảng 3 mức giá nằm ngang */
+/* Bảng 3 mức giá nằm ngang - 3 ô kích thước bằng nhau 100% và thẳng tắp hàng dọc */
 .subroute-prices-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 140px 140px 140px;
+  gap: 12px;
   align-items: center;
-  gap: 16px;
 }
 
+/* Cả 3 ô giá đều đóng khung card bằng nhau chuẩn chỉ */
 .subroute-price-box {
   text-align: center;
-  padding: 4px 8px;
+  width: 140px;
+  height: 58px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: var(--transition);
 }
 
 .subroute-price-box .price-title {
@@ -617,26 +639,26 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   margin-bottom: 2px;
+  line-height: 1.2;
 }
 
 .subroute-price-box .price-number {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #1E293B;
+  line-height: 1.2;
 }
 
-/* Cột Tiện Chuyến Nổi Bật - Chữ Xanh Ngọc Đậm Sang Trọng, Cực Kỳ Sắc Nét Dễ Đọc (Chuẩn Green SM) */
+/* Ô Tiện Chuyến Nổi Bật (Cùng kích cỡ 140px x 58px, viền cyan và nền ngọc nhẹ) */
 .subroute-price-box.highlight-tc {
   background: #F0FDFB;
-  border: 1.5px solid #99F6E4;
-  border-radius: 10px;
-  padding: 5px 14px;
+  border: 1.5px solid #00BBA7;
+  box-shadow: 0 2px 6px rgba(0, 187, 167, 0.08);
 }
 
 .subroute-price-box.highlight-tc .price-title {
   color: #0F766E;
   font-weight: 800;
-  font-size: 0.72rem;
 }
 
 .subroute-price-box.highlight-tc .price-number {
@@ -645,8 +667,10 @@ button {
   font-weight: 900;
 }
 
+/* Nút Đặt xe ngay cố định kích thước 140px thẳng hàng */
 .btn-book-subroute {
-  padding: 10px 22px;
+  width: 140px;
+  padding: 12px 14px;
   background: linear-gradient(135deg, #00BBA7 0%, #008E80 100%);
   color: var(--white);
   border-radius: var(--radius-sm);
@@ -657,6 +681,11 @@ button {
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(0, 187, 167, 0.22);
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .btn-book-subroute:hover {
@@ -1235,15 +1264,36 @@ button {
 /* ==========================================================================
    MOBILE RESPONSIVE (TRÀN VIỀN 100%, KHÔNG LỆCH)
    ========================================================================== */
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .subroute-horizontal-card {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .subroute-dest-info h5 {
+    white-space: normal;
   }
 
   .subroute-prices-row {
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
+    width: 100%;
+  }
+
+  .subroute-price-box {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    padding: 8px 4px;
+  }
+
+  .btn-book-subroute {
+    width: 100%;
+    padding: 11px;
   }
 
   .fleet-gallery-grid {
