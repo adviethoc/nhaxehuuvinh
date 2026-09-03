@@ -1,91 +1,211 @@
 /**
  * Application Core Logic - Dịch Vụ Du Lịch & Tiện Chuyến Hữu Vinh
  * Quản lý: Mr Vinh - Hotline/Zalo: 0984.650.950
+ * 100% Xe Điện VinFast (4 chỗ & 7 chỗ)
  */
 
+// Định nghĩa danh sách các Cụm Tuyến Nằm Ngang chuẩn TienChuyen24h
+const ROUTE_CLUSTERS = [
+  {
+    id: "hcm-bp",
+    title: "TP.HCM ⇄ Bình Phước",
+    subtitle: "Tiện chuyến • Giá tốt • Đón tận nơi",
+    minPriceText: "550K",
+    icon: "🚗"
+  },
+  {
+    id: "hcm-vt",
+    title: "TP.HCM ⇄ Vũng Tàu",
+    subtitle: "Tiện chuyến • Giá tốt • Chạy cao tốc",
+    minPriceText: "750K",
+    icon: "🚗"
+  },
+  {
+    id: "hcm-ld",
+    title: "TP.HCM ⇄ Lâm Đồng",
+    subtitle: "Tiện chuyến • Đà Lạt, Bảo Lộc • Xe êm không say",
+    minPriceText: "950K",
+    icon: "🚗"
+  },
+  {
+    id: "bp-dn",
+    title: "Bình Phước ⇄ Đồng Nai",
+    subtitle: "Tiện chuyến • Giá tốt",
+    minPriceText: "450K",
+    icon: "🚗"
+  },
+  {
+    id: "bp-vt",
+    title: "Bình Phước ⇄ Vũng Tàu",
+    subtitle: "Tiện chuyến • Du lịch biển cuối tuần",
+    minPriceText: "1050K",
+    icon: "🚗"
+  },
+  {
+    id: "bp-dno",
+    title: "Bình Phước ⇄ Đắk Nông",
+    subtitle: "Tiện chuyến • QL14 Tây Nguyên",
+    minPriceText: "700K",
+    icon: "🚗"
+  },
+  {
+    id: "bp-ld",
+    title: "Bình Phước ⇄ Lâm Đồng",
+    subtitle: "Tiện chuyến • Rừng sinh thái Cát Tiên",
+    minPriceText: "500K",
+    icon: "🚗"
+  }
+];
+
 document.addEventListener("DOMContentLoaded", () => {
-  initRoutesDisplay();
-  initFaqAccordion();
+  initHorizontalClusters();
   initBookingModal();
-  initHeroForm();
   initGeolocation();
 });
 
 // ==========================================================================
-// 1. RENDER VÀ LỌC DANH SÁCH TUYẾN ĐƯỜNG
+// 1. RENDER & QUẢN LÝ CÁC CỤM TUYẾN NẰM NGANG (ACCORDION CHUẨN TIENCHUYEN24H)
 // ==========================================================================
-function initRoutesDisplay() {
-  const routesContainer = document.getElementById("routesGridContainer");
-  if (!routesContainer || typeof ROUTES_DATA === "undefined") return;
+function initHorizontalClusters() {
+  const container = document.getElementById("routesClusterContainer");
+  if (!container || typeof ROUTES_DATA === "undefined") return;
 
-  function renderRoutes(filter = "all") {
-    let filtered = ROUTES_DATA;
-    if (filter !== "all") {
-      filtered = ROUTES_DATA.filter(r => r.group === filter);
-    }
+  function renderClusters(searchTerm = "") {
+    const s = searchTerm.toLowerCase().trim();
 
-    if (filtered.length === 0) {
-      routesContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748B;">Không có tuyến nào trong nhóm này. Vui lòng chọn nhóm khác hoặc sử dụng tính năng Tự nhập chuyến.</div>`;
-      return;
-    }
+    container.innerHTML = ROUTE_CLUSTERS.map((cluster, index) => {
+      // Lọc các tuyến con thuộc cụm này
+      let subroutes = ROUTES_DATA.filter(r => r.group === cluster.id);
 
-    routesContainer.innerHTML = filtered.map(route => `
-      <article class="route-card" data-route-id="${route.id}">
-        <span class="route-badge ${route.isPopular ? 'hot' : ''}">
-          ${route.badge || 'Tiện chuyến'}
-        </span>
-        <div class="route-path">
-          <span>${route.from}</span>
-          <span class="arrow">⇄</span>
-          <span>${route.to}</span>
-        </div>
-        <div class="route-meta">
-          <span>📍 ${route.distance}</span>
-          <span>⏱ ${route.duration}</span>
-        </div>
-        <div class="route-pricing-box">
-          <div class="pricing-row tien-chuyen">
-            <span>Vé Tiện Chuyến từ:</span>
-            <span class="price-val">${formatVND(route.tienChuyenPrice)}</span>
+      // Nếu có tìm kiếm, lọc theo từ khóa
+      if (s) {
+        subroutes = subroutes.filter(r => 
+          r.from.toLowerCase().includes(s) || 
+          r.to.toLowerCase().includes(s) ||
+          cluster.title.toLowerCase().includes(s)
+        );
+      }
+
+      // Nếu có tìm kiếm mà cụm không có kết quả thì ẩn
+      if (s && subroutes.length === 0) {
+        return "";
+      }
+
+      // Mặc định mở cụm đầu tiên nếu không tìm kiếm, hoặc mở tất cả khi tìm thấy kết quả
+      const isOpen = s ? true : (index === 0);
+
+      return `
+        <div class="cluster-item ${isOpen ? 'open' : ''}" id="cluster-${cluster.id}">
+          <!-- Thanh tóm tắt cụm nằm ngang -->
+          <div class="cluster-summary-bar" onclick="toggleCluster('${cluster.id}')">
+            <div class="cluster-left-box">
+              <div class="cluster-car-icon">${cluster.icon}</div>
+              <div class="cluster-title-box">
+                <h4>${cluster.title}</h4>
+                <p>${cluster.subtitle}</p>
+              </div>
+            </div>
+            <div class="cluster-right-box">
+              <div class="price-chip-yellow">
+                <span class="chip-label">CHỈ TỪ</span>
+                <span class="chip-price">${cluster.minPriceText}</span>
+              </div>
+              <div class="cluster-chevron">▼</div>
+            </div>
           </div>
-          <div class="pricing-row">
-            <span>Bao xe 4 chỗ:</span>
-            <span class="price-val">${formatVND(route.price4Seats)}</span>
-          </div>
-          <div class="pricing-row">
-            <span>Bao xe 7 chỗ:</span>
-            <span class="price-val">${formatVND(route.price7Seats)}</span>
+
+          <!-- Danh sách các chặng con nằm ngang khi bung ra -->
+          <div class="cluster-drawer-content">
+            ${subroutes.map(route => `
+              <div class="subroute-horizontal-card">
+                <div class="subroute-dest-info">
+                  <h5>${route.from} ⇄ ${route.to}</h5>
+                  <div class="subroute-meta-text">
+                    <span>📍 ${route.distance}</span>
+                    <span>⏱ ${route.duration}</span>
+                  </div>
+                </div>
+
+                <div class="subroute-prices-row">
+                  <div class="subroute-price-box highlight-tc">
+                    <span class="price-title">Tiện chuyến</span>
+                    <span class="price-number">${formatVND(route.tienChuyenPrice)}</span>
+                  </div>
+                  <div class="subroute-price-box">
+                    <span class="price-title">Bao 4 chỗ</span>
+                    <span class="price-number">${formatVND(route.price4Seats)}</span>
+                  </div>
+                  <div class="subroute-price-box">
+                    <span class="price-title">Bao 7 chỗ</span>
+                    <span class="price-number">${formatVND(route.price7Seats)}</span>
+                  </div>
+                </div>
+
+                <button class="btn-book-subroute" onclick="openBookingForRoute('${route.id}')">
+                  ⚡ Đặt xe ngay
+                </button>
+              </div>
+            `).join("")}
           </div>
         </div>
-        <div class="route-card-actions">
-          <button class="btn-book-route" onclick="openBookingForRoute('${route.id}')">
-            ⚡ Đặt xe tuyến này
-          </button>
-          <a href="tel:0984650950" class="btn-call-route" title="Gọi trực tiếp Mr Vinh">
-            📞
+      `;
+    }).join("");
+
+    if (s && container.innerHTML.trim() === "") {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 30px 20px; color: #64748B; background: var(--white); border-radius: var(--radius-md); border: 1px solid var(--slate-200);">
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--slate-800); margin-bottom: 6px;">
+            Không tìm thấy Tuyến Cố Định cho từ khóa "<strong>${searchTerm}</strong>"
+          </div>
+          <p style="font-size: 0.88rem; color: var(--slate-500); margin-bottom: 16px;">
+            Địa chỉ này có thể là ngõ hẻm hoặc địa điểm chi tiết. Hãy sử dụng hệ thống đo km bản đồ tự động của chúng tôi:
+          </p>
+          <a href="booking-custom.html?dropoff=${encodeURIComponent(searchTerm)}" class="btn-prompt-custom" style="display: inline-flex; align-items: center; gap: 8px;">
+            📍 Tự Đo Km & Tính Cước Cho "${searchTerm}" (Từ 8k/km) →
           </a>
         </div>
-      </article>
-    `).join("");
+      `;
+    } else if (s) {
+      // Nếu có kết quả tuyến cố định, vẫn đính kèm thêm 1 nút gợi ý tìm số nhà ngõ hẻm ở cuối
+      container.innerHTML += `
+        <div style="background: #ECFDF5; border: 1.5px dashed #059669; border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.3rem;">📍</span>
+            <div>
+              <div style="font-weight: 800; font-size: 0.92rem; color: #065F46;">Muốn đón/trả tận số nhà tại "${searchTerm}"?</div>
+              <div style="font-size: 0.78rem; color: #047857;">Hệ thống sẽ đo chính xác từng mét theo bản đồ vệ tinh & áp giá 8k - 9k/km</div>
+            </div>
+          </div>
+          <a href="booking-custom.html?dropoff=${encodeURIComponent(searchTerm)}" style="padding: 8px 18px; background: #059669; color: white; border-radius: 8px; font-weight: 800; font-size: 0.85rem; text-decoration: none;">
+            Đo km chi tiết →
+          </a>
+        </div>
+      `;
+    }
   }
 
-  // Khởi tạo hiển thị ban đầu
-  renderRoutes("all");
+  // Render lần đầu
+  renderClusters("");
 
-  // Xử lý nút filter
-  const filterBtns = document.querySelectorAll(".filter-btn");
-  filterBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      filterBtns.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      const group = btn.getAttribute("data-filter");
-      renderRoutes(group);
+  // Bắt sự kiện tìm kiếm nhanh
+  const searchInput = document.getElementById("routeSearchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      renderClusters(e.target.value);
     });
-  });
+  }
+}
+
+// Hàm đóng/mở cụm tuyến
+function toggleCluster(clusterId) {
+  const clusterEl = document.getElementById(`cluster-${clusterId}`);
+  if (clusterEl) {
+    clusterEl.classList.toggle("open");
+  }
 }
 
 // ==========================================================================
-// 2. MODAL ĐẶT XE TUYẾN CỐ ĐỊNH & GỬI ZALO
+// 2. MODAL ĐẶT XE NHANH & GỬI TIN NHẮN ZALO
 // ==========================================================================
 let currentSelectedRoute = null;
 
@@ -107,7 +227,6 @@ function initBookingModal() {
     }
   });
 
-  // Xử lý gửi form modal
   const modalForm = document.getElementById("modalBookingForm");
   if (modalForm) {
     modalForm.addEventListener("submit", (e) => {
@@ -126,58 +245,53 @@ function openBookingForRoute(routeId) {
   if (!modal) return;
 
   document.getElementById("modalRouteTitle").innerText = `${route.from} ⇄ ${route.to}`;
-  document.getElementById("modalDistance").innerText = `${route.distance} (~${route.duration})`;
+  document.getElementById("modalDistance").innerText = `Khoảng cách: ${route.distance} (~${route.duration})`;
   document.getElementById("modalPriceTienChuyen").innerText = formatVND(route.tienChuyenPrice);
   document.getElementById("modalPrice4Seats").innerText = formatVND(route.price4Seats);
   document.getElementById("modalPrice7Seats").innerText = formatVND(route.price7Seats);
 
-  // Gán giá trị ẩn
   const routeInput = document.getElementById("modalInputRoute");
   if (routeInput) routeInput.value = `${route.from} ⇄ ${route.to}`;
 
-  // Đặt ngày mặc định là hôm nay
   const dateInput = document.getElementById("modalTravelDate");
   if (dateInput && !dateInput.value) {
-    const today = new Date().toISOString().split("T")[0];
-    dateInput.value = today;
+    dateInput.value = new Date().toISOString().split("T")[0];
   }
 
   modal.classList.add("active");
 }
 
 // ==========================================================================
-// 3. XỬ LÝ GỬI ĐƠN VÀ KẾT NỐI ZALO MR VINH (0984.650.950)
+// 3. XỬ LÝ GỬI ĐƠN & SOẠN TIN NHẮN QUA ZALO MR VINH (0984.650.950)
 // ==========================================================================
 function handleBookingSubmit(formElement) {
   const formData = new FormData(formElement);
-  const routeName = formData.get("routeName") || (currentSelectedRoute ? `${currentSelectedRoute.from} ⇄ ${currentSelectedRoute.to}` : "Chuyến đi theo yêu cầu");
-  const carType = formData.get("carType") === "7seats" ? "Xe điện VinFast 7 chỗ" : "Xe điện VinFast 4 chỗ";
+  const routeName = formData.get("routeName") || (currentSelectedRoute ? `${currentSelectedRoute.from} ⇄ ${currentSelectedRoute.to}` : "Chuyến đi tùy chọn");
+  const carType = formData.get("carType") === "7seats" ? "Xe điện 7 chỗ" : "Xe điện 4 chỗ";
   const tripType = formData.get("tripType") === "roundtrip" ? "Khứ hồi 2 chiều" : "1 Chiều";
-  const serviceType = formData.get("serviceType") === "baoxe" ? "Bao xe nguyên chuyến" : "Vé Tiện Chuyến";
+  const serviceType = formData.get("serviceType") === "baoxe" ? "Bao xe riêng trọn gói" : "Vé Tiện Chuyến";
   const pickupAddress = formData.get("pickupAddress") || "Liên hệ xác nhận";
   const travelDate = formData.get("travelDate") || "Hôm nay";
-  const travelTime = formData.get("travelTime") || "Càng sớm càng tốt";
+  const travelTime = formData.get("travelTime") || "Sớm nhất";
   const customerName = formData.get("customerName") || "Khách hàng";
   const customerPhone = formData.get("customerPhone") || "";
   const note = formData.get("note") || "Không có";
 
   if (!customerPhone) {
-    alert("Vui lòng nhập số điện thoại để nhà xe liên hệ đón quý khách!");
+    alert("Vui lòng nhập số điện thoại để Mr Vinh liên hệ đón quý khách!");
     return;
   }
 
-  // Tạo nội dung tin nhắn gửi Zalo
-  const message = `🚕 [ĐẶT XE TIỆN CHUYẾN HỮU VINH]
+  const message = `🚕 [ĐẶT XE TIỆN CHUYẾN HỮU VINH 24/7]
 - Khách hàng: ${customerName}
-- Số điện thoại: ${customerPhone}
-- Lộ trình: ${routeName}
-- Loại xe: ${carType} (${serviceType} - ${tripType})
+- Điện thoại: ${customerPhone}
+- Chuyến đi: ${routeName}
+- Dịch vụ: ${carType} (${serviceType} - ${tripType})
 - Điểm đón: ${pickupAddress}
-- Ngày giờ đón: ${travelTime} ngày ${travelDate}
+- Ngày giờ: ${travelTime} ngày ${travelDate}
 - Ghi chú: ${note}
 (Gửi từ website nhaxehuuvinh.vn)`;
 
-  // Lưu lịch sử local
   try {
     const history = JSON.parse(localStorage.getItem("huuvinh_bookings") || "[]");
     history.push({
@@ -190,55 +304,23 @@ function handleBookingSubmit(formElement) {
     localStorage.setItem("huuvinh_bookings", JSON.stringify(history));
   } catch (err) {}
 
-  // Đóng modal nếu có
   const modal = document.getElementById("bookingModal");
   if (modal) modal.classList.remove("active");
 
-  // Thông báo xác nhận và chuyển tiếp qua Zalo
   const confirmRedirect = confirm(
-    `Cảm ơn Quý khách ${customerName}!\nĐơn đặt xe [${routeName}] đã được ghi nhận thành công.\n\nNhấn "OK" để gửi tin nhắn xác nhận tức thì qua Zalo cho Mr Vinh (0984.650.950) hoặc "Hủy" để chờ tài xế gọi lại.`
+    `Cảm ơn Quý khách ${customerName}!\nĐơn đặt xe [${routeName}] đã được ghi nhận.\n\nNhấn "OK" để gửi tin nhắn xác nhận qua Zalo cho Mr Vinh (0984.650.950) hoặc "Hủy" để chờ tài xế gọi lại.`
   );
 
   if (confirmRedirect) {
     const zaloUrl = `https://zalo.me/0984650950?text=${encodeURIComponent(message)}`;
     window.open(zaloUrl, "_blank");
   } else {
-    alert("Dịch Vụ Hữu Vinh đã nhận thông tin và sẽ gọi ngay lại cho quý khách trong 5 phút! Hotline hỗ trợ: 0984.650.950");
+    alert("Dịch Vụ Hữu Vinh đã nhận thông tin và sẽ gọi ngay lại cho quý khách trong 5 phút! Hotline: 0984.650.950");
   }
 }
 
 // ==========================================================================
-// 4. KHỞI TẠO FORM TẠI HERO BANNER
-// ==========================================================================
-function initHeroForm() {
-  const heroForm = document.getElementById("heroBookingForm");
-  if (!heroForm) return;
-
-  // Điền danh sách tuyến vào select box
-  const routeSelect = document.getElementById("heroRouteSelect");
-  if (routeSelect && typeof ROUTES_DATA !== "undefined") {
-    routeSelect.innerHTML = `<option value="">-- Chọn tuyến đường có sẵn --</option>` +
-      ROUTES_DATA.map(r => `<option value="${r.id}">${r.from} ⇄ ${r.to} (Từ ${formatVND(r.tienChuyenPrice)})</option>`).join("");
-  }
-
-  // Đặt ngày đi mặc định là hôm nay
-  const dateInput = document.getElementById("heroTravelDate");
-  if (dateInput) {
-    dateInput.value = new Date().toISOString().split("T")[0];
-  }
-
-  heroForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const selectedRouteId = routeSelect.value;
-    if (selectedRouteId) {
-      currentSelectedRoute = ROUTES_DATA.find(r => r.id === selectedRouteId);
-    }
-    handleBookingSubmit(heroForm);
-  });
-}
-
-// ==========================================================================
-// 5. ĐỊNH VỊ GPS VỊ TRÍ HIỆN TẠI
+// 4. ĐỊNH VỊ GPS VỊ TRÍ HIỆN TẠI
 // ==========================================================================
 function initGeolocation() {
   const gpsBtns = document.querySelectorAll(".btn-gps-current");
@@ -249,43 +331,24 @@ function initGeolocation() {
       if (!targetInput) return;
 
       if (!navigator.geolocation) {
-        alert("Trình duyệt của bạn không hỗ trợ định vị GPS!");
+        alert("Trình duyệt không hỗ trợ định vị GPS!");
         return;
       }
 
-      btn.innerText = "⏳ Đang lấy...";
+      btn.innerText = "⏳ Đang định vị...";
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude.toFixed(5);
           const lng = position.coords.longitude.toFixed(5);
           targetInput.value = `Vị trí hiện tại (GPS: ${lat}, ${lng})`;
-          btn.innerText = "📍 Đã định vị";
+          btn.innerText = "📍 Đã lấy vị trí GPS";
         },
-        (error) => {
-          alert("Không thể lấy vị trí. Vui lòng cho phép quyền truy cập vị trí trên trình duyệt!");
-          btn.innerText = "📍 Vị trí hiện tại";
+        () => {
+          alert("Không lấy được vị trí. Vui lòng cho phép quyền vị trí trên trình duyệt hoặc tự gõ địa chỉ.");
+          btn.innerText = "◎ Dùng vị trí hiện tại";
         },
         { enableHighAccuracy: true, timeout: 8000 }
       );
     });
-  });
-}
-
-// ==========================================================================
-// 6. FAQ ACCORDION
-// ==========================================================================
-function initFaqAccordion() {
-  const faqItems = document.querySelectorAll(".faq-item");
-  faqItems.forEach(item => {
-    const question = item.querySelector(".faq-question");
-    if (question) {
-      question.addEventListener("click", () => {
-        const isActive = item.classList.contains("active");
-        faqItems.forEach(i => i.classList.remove("active"));
-        if (!isActive) {
-          item.classList.add("active");
-        }
-      });
-    }
   });
 }

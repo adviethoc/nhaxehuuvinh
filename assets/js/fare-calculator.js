@@ -1,155 +1,67 @@
 /**
  * Thuật toán tính cước và khoảng cách tự động cho Dịch Vụ Du Lịch Hữu Vinh
+ * Công thức giá theo yêu cầu:
+ * - Xe 4 chỗ: 8.000 đ / km (1 chiều)
+ * - Xe 7 chỗ: 9.000 đ / km (1 chiều)
+ * - Giá 2 chiều (khứ hồi): Chiều về giảm 60% so với chiều đi (Tổng 2 chiều = Chiều đi + 40% Chiều về = 1.4 * Chiều đi)
  * Hotline / Zalo: 0984.650.950 - Mr Vinh
  */
 
-// Bảng khoảng cách mẫu giữa các trung tâm tỉnh thành (km)
-const DISTANCE_MATRIX = {
-  "sai gon": {
-    "dong xoai": 100,
-    "chon thanh": 90,
-    "dong phu": 95,
-    "tan lap": 80,
-    "bu dang": 135,
-    "binh long": 100,
-    "phuoc long": 125,
-    "loc ninh": 125,
-    "bien hoa": 35,
-    "long thanh": 45,
-    "vung tau": 95,
-    "ho tram": 115,
-    "da lat": 300,
-    "bao loc": 180,
-    "gia nghia": 230,
-    "tay ninh": 95,
-    "thu dau mot": 30,
-    "ben cat": 50,
-    "tan uyen": 40
-  },
-  "dong xoai": {
-    "sai gon": 100,
-    "bien hoa": 90,
-    "vung tau": 165,
-    "da lat": 260,
-    "bao loc": 170,
-    "gia nghia": 120,
-    "chon thanh": 35,
-    "dong phu": 15,
-    "binh long": 50,
-    "phuoc long": 45,
-    "bu dang": 55,
-    "loc ninh": 65,
-    "thu dau mot": 75,
-    "tay ninh": 110
-  }
+// Đơn giá niêm yết
+const FARE_RATES = {
+  "4seats": 8000,   // 8k / km
+  "7seats": 9000    // 9k / km
 };
 
 /**
- * Chuẩn hóa chuỗi tìm kiếm không dấu
- */
-function normalizeText(text) {
-  if (!text) return "";
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .trim();
-}
-
-/**
- * Ước tính khoảng cách giữa 2 điểm (km)
- */
-function estimateDistance(pickup, dropoff) {
-  const pNorm = normalizeText(pickup);
-  const dNorm = normalizeText(dropoff);
-
-  // Tìm trong matrix trực tiếp
-  for (const [origin, destinations] of Object.entries(DISTANCE_MATRIX)) {
-    if (pNorm.includes(origin) || (origin === "sai gon" && (pNorm.includes("hcm") || pNorm.includes("ho chi minh") || pNorm.includes("tan son nhat")))) {
-      for (const [dest, km] of Object.entries(destinations)) {
-        if (dNorm.includes(dest)) {
-          return km;
-        }
-      }
-    }
-  }
-
-  // Đảo chiều tìm kiếm
-  for (const [origin, destinations] of Object.entries(DISTANCE_MATRIX)) {
-    if (dNorm.includes(origin) || (origin === "sai gon" && (dNorm.includes("hcm") || dNorm.includes("ho chi minh") || dNorm.includes("tan son nhat")))) {
-      for (const [dest, km] of Object.entries(destinations)) {
-        if (pNorm.includes(dest)) {
-          return km;
-        }
-      }
-    }
-  }
-
-  // Fallback ngẫu nhiên có căn cứ dựa trên độ dài chuỗi hoặc mặc định 85km
-  let hash = 0;
-  for (let i = 0; i < pNorm.length + dNorm.length; i++) {
-    hash += (pNorm.charCodeAt(i % pNorm.length) || 0) + (dNorm.charCodeAt(i % dNorm.length) || 0);
-  }
-  return 60 + (hash % 80);
-}
-
-/**
- * Ước tính thời gian di chuyển dựa trên km
- */
-function estimateTravelTime(distanceKm) {
-  const hours = Math.floor(distanceKm / 45); // Trung bình 45km/h nội/ngoại ô kết hợp
-  const mins = Math.round(((distanceKm % 45) / 45) * 60);
-  if (hours === 0) {
-    return `${Math.max(mins, 25)} phút`;
-  }
-  return `${hours} giờ ${mins > 0 ? mins + ' phút' : ''}`;
-}
-
-/**
- * Tính toán giá cước trọn gói
- * @param {number} distanceKm Khoảng cách (km)
+ * Tính giá cước theo số km thực tế và quy tắc giảm giá khứ hồi
+ * @param {number} distanceKm Khoảng cách thực tế (km)
  * @param {string} carType '4seats' | '7seats'
  * @param {string} tripType 'oneway' | 'roundtrip'
- * @param {string} serviceType 'tienchuyen' | 'baoxe'
  */
-function calculateFare(distanceKm, carType = "4seats", tripType = "oneway", serviceType = "tienchuyen") {
-  let baseRatePerKm = carType === "7seats" ? 11500 : 10000;
-  let minFare = carType === "7seats" ? 500000 : 400000;
+function calculateFare(distanceKm, carType = "4seats", tripType = "oneway") {
+  // Khoảng cách tối thiểu tính cước là 15km để đảm bảo chi phí điều xe
+  const actualKm = Math.max(distanceKm, 15);
+  const ratePerKm = FARE_RATES[carType] || 8000;
 
-  // Tính giá bao xe 1 chiều gốc
-  let fullCarOneway = Math.max(minFare, distanceKm * baseRatePerKm);
-  
-  // Làm tròn tới hàng chục nghìn
-  fullCarOneway = Math.round(fullCarOneway / 50000) * 50000;
+  // Giá cước chiều đi gốc
+  const onewayPrice = Math.round((actualKm * ratePerKm) / 10000) * 10000;
 
-  let fareResult = {
-    distanceKm: distanceKm,
-    durationText: estimateTravelTime(distanceKm),
+  let returnPrice = 0;
+  let finalPrice = onewayPrice;
+  let returnDiscountText = "";
+
+  if (tripType === "roundtrip") {
+    // Chiều về giảm 60% -> Khách chỉ phải trả 40% giá chiều đi
+    returnPrice = Math.round((onewayPrice * 0.4) / 10000) * 10000;
+    finalPrice = onewayPrice + returnPrice;
+    returnDiscountText = "Chiều về giảm 60%";
+  }
+
+  return {
+    distanceKm: actualKm,
+    durationText: estimateTravelTime(actualKm),
     carType: carType,
     tripType: tripType,
-    serviceType: serviceType,
-    finalPrice: 0,
-    price4Seats: fullCarOneway,
-    price7Seats: Math.round((fullCarOneway * 1.18) / 50000) * 50000,
-    tienChuyenPrice: Math.round((fullCarOneway * 0.58) / 50000) * 50000
+    ratePerKm: ratePerKm,
+    onewayPrice: onewayPrice,
+    returnPrice: returnPrice,
+    finalPrice: finalPrice,
+    returnDiscountText: returnDiscountText
   };
+}
 
-  // Tính giá cuối cùng theo tùy chọn
-  let targetBase = (carType === "7seats") ? fareResult.price7Seats : fareResult.price4Seats;
-
-  if (serviceType === "tienchuyen") {
-    fareResult.finalPrice = Math.round((targetBase * 0.6) / 50000) * 50000;
-  } else {
-    fareResult.finalPrice = targetBase;
+/**
+ * Ước tính thời gian di chuyển dựa trên số km
+ */
+function estimateTravelTime(distanceKm) {
+  const speed = 48; // km/h
+  const hours = Math.floor(distanceKm / speed);
+  const mins = Math.round(((distanceKm % speed) / speed) * 60);
+  if (hours === 0) {
+    return `${Math.max(mins, 20)} phút`;
   }
-
-  // Nếu là khứ hồi 2 chiều: Chiều về giảm 40%
-  if (tripType === "roundtrip") {
-    fareResult.finalPrice = Math.round((fareResult.finalPrice * 1.6) / 50000) * 50000;
-  }
-
-  return fareResult;
+  return `${hours} giờ ${mins > 0 ? mins + ' phút' : ''}`;
 }
 
 /**
@@ -160,4 +72,21 @@ function formatVND(amount) {
   return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" })
     .format(amount)
     .replace("₫", "đ");
+}
+
+/**
+ * Tính khoảng cách đường chim bay (Haversine Formula) làm fallback
+ */
+function calculateHaversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Bán kính Trái Đất (km)
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const straightKm = R * c;
+  // Nhân hệ số uốn khúc đường bộ thực tế ~1.28
+  return Math.round(straightKm * 1.28);
 }
