@@ -10,7 +10,9 @@
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://nhaxehuuvinh.vn/booking-custom.html" />
 
-  <link rel="stylesheet" href="assets/css/style.css?v=2.1" />
+  <!-- Leaflet Map Stylesheet -->
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="assets/css/style.css?v=3.1" />
 </head>
 <body>
 
@@ -106,10 +108,20 @@
             <!-- Dropdown gợi ý địa chỉ chuẩn bản đồ -->
             <div class="autocomplete-dropdown" id="pickupDropdown"></div>
           </div>
+
+          <!-- Các nút hành động bản đồ & GPS cho Điểm đón -->
+          <div class="field-action-buttons">
+            <button type="button" class="btn-location-action" id="btnOpenMapPickup">
+              <span>🗺️</span> Bản đồ
+            </button>
+            <button type="button" class="btn-location-action" id="btnGpsPickup">
+              <span>◎</span> Vị trí hiện tại
+            </button>
+          </div>
         </div>
 
         <!-- Nút Đảo Chiều -->
-        <div style="display: flex; justify-content: center; margin: 6px 0 14px;">
+        <div style="display: flex; justify-content: center; margin: 10px 0 16px;">
           <button type="button" id="btnSwapLocations" style="padding: 7px 18px; background: var(--primary-light); color: var(--primary-dark); font-weight: 800; font-size: 0.85rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--primary-border);">
             ⇅ Đảo chiều đón ⇄ đến
           </button>
@@ -121,7 +133,7 @@
             <strong>2. Điểm đến:</strong> <span style="font-weight: 500; color: var(--slate-500);">(Nhập địa chỉ nơi bạn muốn đến)</span>
           </label>
 
-          <div class="autocomplete-container">
+          <div class="autocomplete-container" style="margin-bottom: 8px;">
             <input 
               type="text" 
               id="customDropoff" 
@@ -136,6 +148,13 @@
             <span style="position: absolute; left: 14px; top: 12px; font-size: 1.1rem; pointer-events: none;">🏁</span>
             <!-- Dropdown gợi ý địa chỉ chuẩn bản đồ -->
             <div class="autocomplete-dropdown" id="dropoffDropdown"></div>
+          </div>
+
+          <!-- Nút chọn điểm đến trên bản đồ Google Map -->
+          <div class="field-action-buttons" style="margin-bottom: 12px;">
+            <button type="button" class="btn-location-action btn-full" id="btnOpenMapDropoff">
+              <span>🗺️</span> Chọn điểm đến trên bản đồ
+            </button>
           </div>
         </div>
 
@@ -278,11 +297,73 @@
     </div>
   </footer>
 
+  <!-- Modal Chọn Vị Trí Trực Tiếp Trên Bản Đồ Google Map (Chuẩn TienChuyen24h) -->
+  <div class="map-picker-modal" id="mapPickerModal">
+    <div class="map-picker-card">
+      <!-- Header -->
+      <div class="map-picker-header">
+        <button type="button" class="btn-back-map" id="btnCloseMapPicker" aria-label="Quay lại">
+          ←
+        </button>
+        <div class="map-header-title-box">
+          <h3 id="mapPickerTitle">Chọn điểm đến</h3>
+          <p id="mapPickerSubtitle">Đưa ghim đến đúng điểm đến</p>
+        </div>
+      </div>
+
+      <!-- Viewport Bản Đồ có Ghim Cố Định Trung Tâm -->
+      <div class="map-viewport-wrapper">
+        <div id="interactiveMapContainer" class="interactive-map-box"></div>
+
+        <!-- Hướng dẫn nổi trên ghim -->
+        <div class="map-center-guide-pill">
+          Di chuyển bản đồ để chọn
+        </div>
+
+        <!-- Ghim trung tâm cố định (Map Center Pin) -->
+        <div class="map-center-fixed-pin">
+          <div class="map-pin-circle">
+            <div class="map-pin-dot"></div>
+          </div>
+          <div class="map-pin-pointer"></div>
+          <div class="map-pin-shadow"></div>
+        </div>
+
+        <!-- Nút Vị Trí Của Tôi nổi trên bản đồ -->
+        <button type="button" class="btn-floating-gps" id="btnMapPickerMyLocation" title="Vị trí của tôi">
+          <span>◎</span> Vị trí của tôi
+        </button>
+      </div>
+
+      <!-- Bottom Sheet Địa Chỉ Đã Chọn & Nút Xác Nhận -->
+      <div class="map-picker-bottom-sheet">
+        <div class="selected-address-label">ĐỊA CHỈ ĐÃ CHỌN</div>
+        <div class="selected-address-card">
+          <div class="address-icon-box">📍</div>
+          <div class="address-details-box">
+            <div class="address-name" id="mapSelectedAddressName">
+              Di chuyển bản đồ hoặc bấm Vị trí của tôi để chọn điểm chính xác.
+            </div>
+            <div class="address-coords" id="mapSelectedCoordinates">
+              10.776889, 106.700806
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-confirm-location" id="btnConfirmLocation">
+          XÁC NHẬN VỊ TRÍ
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
-  <script src="assets/js/routes-data.js?v=3.0"></script>
-  <script src="assets/js/fare-calculator.js?v=3.0"></script>
-  <script src="assets/js/map-geocoder.js?v=3.0"></script>
-  <script src="assets/js/app.js?v=3.0"></script>
+  <script src="assets/vendor/leaflet/leaflet.js"></script>
+  <script src="assets/js/routes-data.js?v=3.1"></script>
+  <script src="assets/js/fare-calculator.js?v=3.1"></script>
+  <script src="assets/js/map-geocoder.js?v=3.1"></script>
+  <script src="assets/js/map-picker.js?v=3.1"></script>
+  <script src="assets/js/app.js?v=3.1"></script>
 
   <script>
     // Lưu tọa độ thực tế của điểm đón và điểm đến
@@ -364,6 +445,30 @@
             },
             { enableHighAccuracy: true, timeout: 8000 }
           );
+        });
+      }
+
+      // Nút mở bản đồ chọn Điểm Đón trực tiếp trên map
+      const btnMapPickup = document.getElementById("btnOpenMapPickup");
+      if (btnMapPickup) {
+        btnMapPickup.addEventListener("click", () => {
+          MapPicker.open("pickup", pickupCoords, (res) => {
+            pickupCoords = { lat: res.lat, lon: res.lon, name: res.address };
+            document.getElementById("customPickup").value = res.address;
+            recalculateWithRealMap();
+          });
+        });
+      }
+
+      // Nút mở bản đồ chọn Điểm Đến trực tiếp trên map
+      const btnMapDropoff = document.getElementById("btnOpenMapDropoff");
+      if (btnMapDropoff) {
+        btnMapDropoff.addEventListener("click", () => {
+          MapPicker.open("dropoff", dropoffCoords, (res) => {
+            dropoffCoords = { lat: res.lat, lon: res.lon, name: res.address };
+            document.getElementById("customDropoff").value = res.address;
+            recalculateWithRealMap();
+          });
         });
       }
 

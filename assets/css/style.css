@@ -1302,3 +1302,318 @@ button {
     height: 48px;
   }
 }
+
+/* ==========================================================================
+   CÁC NÚT THAO TÁC BẢN ĐỒ / VỊ TRÍ TRONG FORM ĐẶT XE
+   ========================================================================== */
+.field-action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn-location-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #F0FDFA;
+  border: 1.5px solid #99F6E4;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+  flex: 1;
+}
+
+.btn-location-action:hover {
+  background: #CCFBF1;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.btn-location-action.btn-full {
+  width: 100%;
+  flex: none;
+}
+
+/* ==========================================================================
+   MODAL CHỌN ĐỊA ĐIỂM TRÊN BẢN ĐỒ GOOGLE MAP (CHUẨN TIENCHUYEN24H)
+   ========================================================================== */
+.map-picker-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.map-picker-modal.active {
+  display: flex;
+}
+
+.map-picker-card {
+  background: var(--white);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 580px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+.map-picker-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--white);
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.btn-back-map {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--slate-100);
+  font-size: 1.25rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  color: var(--slate-800);
+  transition: var(--transition);
+}
+
+.btn-back-map:hover {
+  background: var(--slate-200);
+  transform: scale(1.05);
+}
+
+.map-header-title-box h3 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--slate-900);
+  margin-bottom: 2px;
+}
+
+.map-header-title-box p {
+  font-size: 0.8rem;
+  color: var(--slate-500);
+  font-weight: 500;
+}
+
+.map-viewport-wrapper {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  background: #E2E8F0;
+  overflow: hidden;
+}
+
+.interactive-map-box {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Floating Guide Tooltip trên đầu ghim */
+.map-center-guide-pill {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1E293B;
+  color: #FFFFFF;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+/* Ghim Cố Định Trung Tâm Bản Đồ (Center Pin) */
+.map-center-fixed-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.18s ease-out;
+}
+
+.map-center-fixed-pin.lifting {
+  transform: translate(-50%, -118%) scale(1.08);
+}
+
+.map-pin-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3.5px solid #FFFFFF;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-pin-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FFFFFF;
+}
+
+.map-pin-pointer {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid var(--primary);
+  margin-top: -2px;
+}
+
+.map-pin-shadow {
+  width: 14px;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 50%;
+  margin-top: 2px;
+  filter: blur(1px);
+  transition: transform 0.18s ease-out, opacity 0.18s ease-out;
+}
+
+.map-center-fixed-pin.lifting .map-pin-shadow {
+  transform: scale(0.65);
+  opacity: 0.2;
+}
+
+/* Nút Vị Trí Của Tôi Nổi Góc Dưới */
+.btn-floating-gps {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+  background: #FFFFFF;
+  color: var(--primary);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--slate-200);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.btn-floating-gps:hover {
+  background: #F8FAFC;
+  transform: translateY(-1px);
+}
+
+/* Bottom Sheet Địa Chỉ Đã Chọn & Nút Xác Nhận */
+.map-picker-bottom-sheet {
+  padding: 16px 20px 20px;
+  background: var(--white);
+  border-top: 1px solid var(--slate-200);
+}
+
+.selected-address-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--slate-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.selected-address-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F8FAFC;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.address-icon-box {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.address-details-box {
+  flex: 1;
+}
+
+.address-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1.4;
+}
+
+.address-coords {
+  font-size: 0.78rem;
+  color: var(--slate-500);
+  margin-top: 3px;
+  font-family: monospace;
+}
+
+.btn-confirm-location {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: var(--transition);
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3);
+}
+
+.btn-confirm-location:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .map-picker-card {
+    border-radius: 16px;
+    height: 94vh;
+    max-height: 94vh;
+  }
+
+  .map-viewport-wrapper {
+    height: calc(94vh - 250px);
+    min-height: 280px;
+  }
+}
