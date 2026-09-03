@@ -5,10 +5,10 @@
 ---
 
 ## 1. THÔNG TIN DOANH NGHIỆP & NGỮ CẢNH DỰ ÁN
-- **Tên dịch vụ:** Dịch Vụ Du Lịch & Tiện Chuyến Hữu Vinh (Hữu Vinh Car).
+- **Tên dịch vụ:** DỊCH VỤ DU LỊCH - ĐƯA ĐÓN TẬN NƠI 24/7 (Hữu Vinh Car).
 - **Chủ xe / Quản lý:** Mr Vinh.
 - **Hotline / Zalo liên hệ:** **0984.650.950** (Tất cả nút gọi điện, nhắn tin, đặt xe trên web đều liên kết tới số này).
-- **Đội xe phục vụ:** 100% Xe Điện VinFast đời mới (VF6 4 chỗ, VF8 7 chỗ), biển số vàng kinh doanh vận tải: **93H - 064.29** (Tỉnh Bình Phước).
+- **Đội xe phục vụ:** 98% Xe Điện VinFast đời mới (VF6 4 chỗ, VF8 7 chỗ), biển số vàng kinh doanh vận tải: **93H - 064.29** (Tỉnh Bình Phước).
 - **Tuyến đường trọng điểm:** Tuyến TP.HCM ⇄ Bình Phước (Đồng Xoài, Chơn Thành, Đồng Phú, Tân Lập, Bình Long, Bù Đăng...) và các tuyến du lịch liên tỉnh (Vũng Tàu, Đà Lạt, Biên Hòa, Đắk Nông, Cát Tiên).
 - **Trang web đối chuẩn thiết kế (Benchmark):** `https://tienchuyen24h.vn/`. Chủ xe yêu cầu thiết kế tinh gọn, sạch sẽ, bố cục thanh thoát, không dùng nền tối phức tạp, thân thiện trên cả máy tính lẫn điện thoại.
 - **Kho lưu trữ GitHub:** `https://github.com/adviethoc/nhaxehuuvinh` (Nhánh: `main`).

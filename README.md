@@ -1,9 +1,9 @@
-# Dịch Vụ Du Lịch & Tiện Chuyến Hữu Vinh (100% Xe Điện VinFast)
+# DỊCH VỤ DU LỊCH - ĐƯA ĐÓN TẬN NƠI 24/7 (Hữu Vinh Car)
 
 Website chính thức của dịch vụ xe tiện chuyến, xe ghép và bao xe hợp đồng du lịch liên tỉnh **Hữu Vinh Car**.
 - **Quản lý / Tài xế:** Mr Vinh
 - **Hotline / Zalo hỗ trợ 24/7:** **0984.650.950**
-- **Đội xe thực tế:** 100% xe điện VinFast đời mới (VF6 4 chỗ, VF8 7 chỗ), biển số vàng kinh doanh vận tải: **93H - 064.29**.
+- **Đội xe thực tế:** 98% xe điện VinFast đời mới (VF6 4 chỗ, VF8 7 chỗ), biển số vàng kinh doanh vận tải: **93H - 064.29**.
 - **Tuyến đường phục vụ:** TP.HCM ⇄ Bình Phước (Đồng Xoài, Chơn Thành, Đồng Phú, Tân Lập, Bình Long, Bù Đăng...), Vũng Tàu, Đà Lạt, Biên Hòa, Đắk Nông...
 
 ---
