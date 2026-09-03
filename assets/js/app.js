@@ -109,6 +109,7 @@ function initHorizontalClusters() {
               <div class="price-chip-yellow">
                 <span class="chip-label">CHỈ TỪ</span>
                 <span class="chip-price">${cluster.minPriceText}</span>
+                <span class="chip-red-bar"></span>
               </div>
               <div class="cluster-chevron">▼</div>
             </div>
