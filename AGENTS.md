@@ -6,6 +6,7 @@
 
 ## 1. THÔNG TIN DOANH NGHIỆP & NGỮ CẢNH DỰ ÁN
 - **Tên dịch vụ:** DỊCH VỤ DU LỊCH - ĐƯA ĐÓN TẬN NƠI 24/7 (Hữu Vinh Car).
+- **Logo & Tiêu đề phụ:** **HỮU VINH CAR - Xe VinFast Cao Cấp** (Đã đổi từ "100% Xe Điện VinFast").
 - **Chủ xe / Quản lý:** Mr Vinh.
 - **Hotline / Zalo liên hệ:** **0984.650.950** (Tất cả nút gọi điện, nhắn tin, đặt xe trên web đều liên kết tới số này).
 - **Đội xe phục vụ:** 98% Xe Điện VinFast đời mới (VF6 4 chỗ, VF8 7 chỗ), biển số vàng kinh doanh vận tải: **93H - 064.29** (Tỉnh Bình Phước).

@@ -1,7 +1,7 @@
 /**
  * Application Core Logic - Dịch Vụ Du Lịch & Tiện Chuyến Hữu Vinh
  * Quản lý: Mr Vinh - Hotline/Zalo: 0984.650.950
- * 100% Xe Điện VinFast (4 chỗ & 7 chỗ)
+ * Xe VinFast Cao Cấp (4 chỗ & 7 chỗ)
  */
 
 // Định nghĩa danh sách các Cụm Tuyến Nằm Ngang chuẩn TienChuyen24h

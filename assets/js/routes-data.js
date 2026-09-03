@@ -1,7 +1,7 @@
 /**
  * Dữ liệu danh sách tuyến đường và bảng giá của Dịch Vụ Du Lịch Hữu Vinh
  * Quản lý: Mr Vinh - Hotline/Zalo: 0984.650.950
- * 100% Xe Điện VinFast (4 chỗ & 7 chỗ)
+ * Xe VinFast Cao Cấp (4 chỗ & 7 chỗ)
  * 
  * ĐƠN GIÁ NIÊM YẾT CHUẨN CÔNG THỨC THEO SỐ KM:
  * - Xe 4 chỗ (bao xe): 10.000 đ / km
